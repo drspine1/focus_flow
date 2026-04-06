@@ -2,12 +2,10 @@
 
 # FocusFlow: AI-Powered Energy Dashboard
 
-**Status:** Day 1 of #ENg30DayChallenge (Hard Mode)  
-**Live Demo:** [INSERT YOUR VERCEL LINK HERE]
+
 
 FocusFlow is a modern productivity dashboard built to solve task paralysis. Unlike traditional to-do lists, FocusFlow uses AI to break down complex goals and helps users manage their cognitive load by filtering tasks based on current energy levels.
 
----
 
 ## The Mission
 To build a functional, production-ready frontend that integrates real-world AI logic and high-performance state management within 30 days.
@@ -27,7 +25,7 @@ To build a functional, production-ready frontend that integrates real-world AI l
 * **Responsive Design:** A seamless experience from mobile to desktop.
 * **Loading Excellence:** Skeleton loaders and graceful error handling.
 
----
+
 
 ## Getting Started
 
@@ -58,7 +56,7 @@ npm run dev
 ```
 Open http://localhost:3000 with your browser to see the result.
 
----
+
 
 ## 30-Day Roadmap and Progress
 
@@ -78,12 +76,9 @@ Open http://localhost:3000 with your browser to see the result.
 ### Week 4: Shipping
 * **Day 25-30:** Testing, Accessibility Audit, and Demo Launch.
 
----
 
-## Build In Public
-I am documenting my progress daily. Follow the journey:
-* **X (Twitter):** [Link to your Profile]
-* **LinkedIn:** [Link to your Profile]
+
+
 
 #ENg30DayChallenge #ENgShipIt #BuildInPublic
 

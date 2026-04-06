@@ -26,13 +26,29 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 bg-slate-50 overflow-x-hidden">
       {/* Challenge Badge - Simple Fade In */}
+  {/* Challenge Badge - Hanging/Dangling Effect */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ 
+          opacity: 1, 
+          y: 0,
+          rotate: [0, -3, 3, -2, 2, 0], // The "dangle" sequence
+        }}
+        transition={{
+          opacity: { duration: 0.5 },
+          y: { duration: 0.5 },
+          rotate: {
+            delay: 0.5,
+            duration: 4,
+            repeat: Infinity, // Keeps it dangling
+            ease: "easeInOut",
+          }
+        }}
+        style={{ originY: 0 }} // Sets the "hinge" at the top
         className="z-10 max-w-5xl w-full flex justify-center lg:justify-between font-mono text-sm mb-12 lg:mb-0"
       >
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4">
-          Day 1: #ENg30DayChallenge
+        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm">
+          Day 1: #ENg30DaysChallenge
         </p>
       </motion.div>
 

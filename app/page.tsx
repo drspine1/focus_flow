@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion"; // Added Variants to the import
 
 export default function Home() {
-  // Container variants to handle the staggered timing
-  const containerVariants = {
+  // Explicitly defined types to satisfy the TypeScript compiler on Vercel
+  const containerVariants: Variants = {
     initial: { opacity: 0 },
     animate: {
       opacity: 1,
@@ -14,8 +14,7 @@ export default function Home() {
     },
   };
 
-  // Individual item variants
-  const itemVariants = {
+  const itemVariants: Variants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
       opacity: 1, 
@@ -74,7 +73,6 @@ export default function Home() {
         </motion.div>
       </motion.div>
 
-      
       <motion.div 
         className="mt-10 md:mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-4xl w-full"
         variants={containerVariants}

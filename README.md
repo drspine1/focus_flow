@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+
+# FocusFlow: AI-Powered Energy Dashboard
+
+**Status:** Day 1 of #ENg30DayChallenge (Hard Mode)  
+**Live Demo:** [INSERT YOUR VERCEL LINK HERE]
+
+FocusFlow is a modern productivity dashboard built to solve task paralysis. Unlike traditional to-do lists, FocusFlow uses AI to break down complex goals and helps users manage their cognitive load by filtering tasks based on current energy levels.
+
+---
+
+## The Mission
+To build a functional, production-ready frontend that integrates real-world AI logic and high-performance state management within 30 days.
+
+## Tech Stack (Frontend Track)
+* **Framework:** Next.js 15 (App Router)
+* **Language:** TypeScript
+* **State Management:** Zustand
+* **Styling:** Tailwind CSS + Framer Motion
+* **Backend-as-a-Service:** Supabase (Auth and Database)
+* **AI Integration:** OpenAI API
+
+## Key Features (Hard Mode Requirements)
+* **AI Task Breakdown:** Transform one big task into 5 actionable sub-tasks.
+* **Energy-Level Filtering:** Toggle between Low, Medium, and High brainpower views.
+* **Real-Time Persistence:** Secure data storage with Supabase.
+* **Responsive Design:** A seamless experience from mobile to desktop.
+* **Loading Excellence:** Skeleton loaders and graceful error handling.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+To run this project locally, follow these steps:
 
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/YOUR_USERNAME/focus-flow.git
+cd focus-flow
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a .env.local file in the root directory and add your credentials:
+```text
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run the development server
+```bash
+npm run dev
+```
+Open http://localhost:3000 with your browser to see the result.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 30-Day Roadmap and Progress
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Week 1: Foundation
+* **Day 1:** Project Initialization and PRD.
+* **Day 2-3:** UI Component Architecture (Sidebar and Task Cards).
+* **Day 4:** Repository Setup and Project Breakdown.
+* **Day 5-7:** Core CRUD Logic.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Week 2: Logic and State
+* **Day 8-15:** Zustand Integration and Supabase Sync.
+* **Day 15 Checkpoint:** Functional Task Management.
 
-## Deploy on Vercel
+### Week 3: AI and Polish
+* **Day 16-24:** OpenAI Integration and Framer Motion Animations.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Week 4: Shipping
+* **Day 25-30:** Testing, Accessibility Audit, and Demo Launch.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Build In Public
+I am documenting my progress daily. Follow the journey:
+* **X (Twitter):** [Link to your Profile]
+* **LinkedIn:** [Link to your Profile]
+
+#ENg30DayChallenge #ENgShipIt #BuildInPublic
+
+
+

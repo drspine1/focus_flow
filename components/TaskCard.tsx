@@ -13,7 +13,7 @@ export const TaskCard = ({ task, onComplete, onDelete }: TaskCardProps) => (
   <div className="bg-white p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-black transition-all flex flex-col justify-between group relative">
     <button 
       onClick={() => onDelete(task.id)}
-      className="absolute top-4 right-4 p-2 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+      className="absolute top-3 right-3 p-2 text-red-500 hover:text-red-700 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100"
     >
       <Trash2 size={16} />
     </button>

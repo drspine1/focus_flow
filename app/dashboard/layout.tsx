@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 import { Plus, Trophy } from "lucide-react";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNav from "@/components/layout/MobileNav";
@@ -32,20 +32,29 @@ export default function DashboardLayout({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const isMounted = useRef(false);
 
   // Load tasks from localStorage on mount
   useEffect(() => {
+    isMounted.current = true;
     const saved = localStorage.getItem("focusflow_tasks");
     if (saved) {
-      const parsed: Task[] = JSON.parse(saved);
-      const now = Date.now();
-      setTasks(parsed.filter(t => (t as any).createdAt ? now - (t as any).createdAt < 86400000 : true));
+      try {
+        const parsed: Task[] = JSON.parse(saved);
+        const now = Date.now();
+        const filtered = parsed.filter(t => (t as any).createdAt ? now - (t as any).createdAt < 86400000 : true);
+        setTasks(filtered);
+      } catch (error) {
+        console.error("Failed to parse tasks from localStorage:", error);
+      }
     }
   }, []);
 
-  // Save tasks to localStorage whenever tasks change
+  // Save tasks to localStorage whenever tasks change (only after mount)
   useEffect(() => {
-    localStorage.setItem("focusflow_tasks", JSON.stringify(tasks));
+    if (isMounted.current) {
+      localStorage.setItem("focusflow_tasks", JSON.stringify(tasks));
+    }
   }, [tasks]);
 
   const completedTasks = tasks.filter(t => t.isCompleted);
@@ -79,7 +88,7 @@ export default function DashboardLayout({
 
           <div className="flex items-center gap-1 md:gap-3">
             <button onClick={() => setIsArchiveOpen(true)} className="relative p-2 md:p-2.5 bg-slate-50 rounded-xl hover:bg-orange-50 transition-all">
-              <Trophy size={20} className="md:w-[22px] md:h-[22px]" />
+              <Trophy size={20} className="md:w-[22px] md:h-[22px] text-slate-500" />
               {completedTasks.length > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 w-4 md:h-5 md:w-5 bg-orange-600 text-white text-[8px] md:text-[10px] rounded-full flex items-center justify-center font-black border-2 border-white">
                   {completedTasks.length}

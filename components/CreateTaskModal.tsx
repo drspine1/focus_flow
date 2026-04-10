@@ -59,14 +59,14 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title Input */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40 block mb-2">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/80 block mb-2">
               Task Title
             </label>
             <input 
               autoFocus
               type="text" 
               placeholder="What's the goal?"
-              className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 font-bold text-black focus:ring-2 focus:ring-black outline-none transition-all"
+              className="w-full bg-slate-100 border border-slate-100 rounded-2xl p-4 font-normal text-black focus:ring-2 focus:ring-black outline-none transition-all"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
             />
@@ -74,7 +74,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
 
           {/* Energy Level Selector */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40 block mb-3">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/80 block mb-3">
               Energy Level
             </label>
             <div className="grid grid-cols-3 gap-3">
@@ -85,8 +85,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
                   onClick={() => setNewEnergy(lvl)}
                   className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                     newEnergy === lvl 
-                      ? 'bg-black text-white shadow-lg shadow-black/20 scale-[1.02]' 
-                      : 'bg-slate-50 text-black/40 hover:bg-slate-100'
+                      ? 'bg-black/90 text-white shadow-lg shadow-black/20 scale-[1.02]' 
+                      : 'bg-slate-50 text-black/70 hover:bg-slate-100'
                   }`}
                 >
                   {lvl}
@@ -98,7 +98,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
           {/* Submit Button */}
           <button 
             type="submit" 
-            className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase text-sm hover:bg-slate-800 transition-all active:scale-[0.98]"
+            className="w-full bg-black/90 text-white py-4 rounded-2xl font-black uppercase text-sm hover:bg-slate-800 transition-all active:scale-[0.98]"
           >
             Confirm Task
           </button>

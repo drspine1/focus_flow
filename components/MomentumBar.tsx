@@ -24,14 +24,14 @@ const MomentumBar: FC<MomentumBarProps> = ({
     <div className="mb-6 md:mb-10 bg-white p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-slate-100 shadow-sm">
       <div className="flex justify-between items-end mb-3 md:mb-4">
         <div>
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+          <h4 className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-800">
             Daily Momentum
           </h4>
           <p className="text-xl md:text-2xl font-black text-black">
             {Math.round(safeProgress)}%
           </p>
         </div>
-        <p className="text-xs font-bold text-slate-500">
+        <p className="text-xs font-bold text-slate-700">
           {completedCount} / {totalCount} Wins
         </p>
       </div>

@@ -16,17 +16,17 @@ export const ArchiveDrawer = ({ isOpen, onClose, tasks, onDelete }: ArchiveDrawe
       <div className="p-6 md:p-8 h-full flex flex-col">
         <div className="flex justify-between items-center mb-10">
           <div>
-            <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-2">
+            <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-2 text-slate-900">
               <Trophy className="text-orange-500" size={24} /> Today's Wins
             </h2>
-            <p className="text-slate-400 text-xs font-bold mt-1">Completed in the last 24h</p>
+            <p className="text-slate-600 text-xs font-bold mt-1">Completed in the last 24h</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={24} /></button>
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
           {tasks.length > 0 ? tasks.map(task => (
-            <div key={task.id} className="p-5 bg-slate-50 rounded-[24px] border border-slate-100 flex items-start gap-4 group">
+            <div key={task.id} className="p-5 md:bg-slate-50 bg-slate-200 rounded-[24px] border border-slate-100 flex items-start gap-4 group">
               <div className="bg-green-100 p-2 rounded-full text-green-600"><CheckCircle2 size={18} /></div>
               <div className="flex-1">
                 <p className="font-bold text-sm text-slate-800 line-through decoration-slate-300">{task.title}</p>
@@ -38,8 +38,8 @@ export const ArchiveDrawer = ({ isOpen, onClose, tasks, onDelete }: ArchiveDrawe
             </div>
           )) : (
             <div className="flex flex-col items-center justify-center h-64 opacity-30">
-              <Inbox size={48} className="mb-4" />
-              <p className="text-sm font-bold">No wins recorded yet.</p>
+              <Inbox size={48} className="mb-4 text-black" />
+              <p className="text-sm font-bold text-black">No wins recorded yet.</p>
             </div>
           )}
         </div>

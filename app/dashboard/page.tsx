@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Inbox } from "lucide-react";
-import { Task } from "@/types";
 
 // Import our new components
 import MomentumBar from "@/components/MomentumBar";
@@ -39,7 +38,7 @@ export default function Dashboard() {
 
         <div className="max-w-7xl mx-auto flex gap-1 md:gap-2 p-1 bg-slate-50 rounded-xl w-fit border border-slate-100 overflow-x-auto">
           {levels.map((l) => (
-            <button key={l.id} onClick={() => setActive(l.id)} className={`px-3 md:px-4 lg:px-6 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${active === l.id ? l.color : 'text-black/40'}`}>
+            <button key={l.id} onClick={() => setActive(l.id)} className={`px-3 md:px-4 lg:px-6 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${active === l.id ? l.color : 'text-black/70'}`}>
               {l.label}
             </button>
           ))}
@@ -71,9 +70,9 @@ export default function Dashboard() {
 // Small helper component for the empty screen
 const EmptyState = ({ totalTasks }: { totalTasks: number }) => (
   <div className="flex flex-col items-center justify-center py-16 md:py-24 bg-white rounded-[32px] md:rounded-[40px] border-2 border-dashed border-slate-100 mx-4 md:mx-0">
-    <Inbox className="text-slate-300 mb-4 w-8 h-8 md:w-10 md:h-10" />
-    <h3 className="text-lg md:text-xl font-bold text-black/80 text-center px-4">{totalTasks > 0 ? "You're all caught up!" : "Nothing here yet"}</h3>
-    <p className="text-slate-400 text-xs md:text-sm max-w-[240px] text-center mt-2 px-4">
+    <Inbox className="text-slate-400 mb-4 w-8 h-8 md:w-10 md:h-10" />
+    <h3 className="text-lg md:text-xl font-bold text-black/80 text-center px-4">{totalTasks > 0 ? "You're all caught up!" : "No! tasks yet "}</h3>
+    <p className="text-slate-500 text-xs md:text-sm max-w-[240px] text-center mt-2 px-4">
       {totalTasks > 0 ? "Check your Trophy for wins!" : "Add a task to start your daily momentum."}
     </p>
   </div>

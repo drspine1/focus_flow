@@ -54,7 +54,7 @@ export default function HeroSection() {
         className="z-10 max-w-5xl w-full flex justify-center lg:justify-between font-mono text-sm mb-12 lg:mb-0"
       >
         <p className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm">
-          Day 3: #ENg30DayChallenge
+          Day 5: #ENg30DayChallenge
         </p>
       </motion.div>
 

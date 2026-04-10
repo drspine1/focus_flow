@@ -1,18 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import {  Plus, Clock, ChevronRight } from "lucide-react";
-
+import { Inbox } from "lucide-react";
 import { Task } from "@/types";
 
-
-const MOCK_TASKS: Task[] = [
-  { id: "1", title: "Architect Database Schema", energy: "high", category: "Backend", time: "2h 30m", isCompleted: false },
-  { id: "2", title: "Refactor Navigation Component", energy: "mid", category: "Frontend", time: "45m", isCompleted: false },
-  { id: "3", title: "Update Documentation", energy: "low", category: "Admin", time: "20m", isCompleted: false },
-  { id: "4", title: "Deep Work: API Integration", energy: "high", category: "Fullstack", time: "3h 00m", isCompleted: false },
-  { id: "5", title: "Review Pull Requests", energy: "low", category: "DevOps", time: "15m", isCompleted: false },
-];
+// Import our new components
+import MomentumBar from "@/components/MomentumBar";
+import { TaskCard } from "@/components/TaskCard";
+import { useTasks } from "./layout";
 
 const levels = [
   { id: 'all', label: 'All', color: 'bg-white text-black ring-1 ring-slate-200' },
@@ -23,115 +18,63 @@ const levels = [
 
 export default function Dashboard() {
   const [active, setActive] = useState<string>('all');
+  const { tasks, onCompleteTask, onDeleteTask } = useTasks();
 
-  const filteredTasks = MOCK_TASKS.filter((task) => 
-    active === 'all' ? true : task.energy === active
-  );
+  const completedTasks = tasks.filter(t => t.isCompleted);
+  const activeTasks = tasks.filter(t => !t.isCompleted);
+  const progress = tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0;
 
-  const getStatusMessage = () => {
-    const count = filteredTasks.length;
-    const levelLabel = levels.find(l => l.id === active)?.label || "selected";
-    if (active === 'all') return `Showing all ${count} tasks for today.`;
-    return `You have ${count} ${count === 1 ? 'task' : 'tasks'} for ${levelLabel.toLowerCase()}.`;
-  };
+  const filteredTasks = activeTasks.filter(t => active === 'all' || t.energy === active);
 
   return (
-    <div className="min-h-screen text-slate-900 pb-10 font-sans">
+    <div className="min-h-screen text-slate-900 pb-10 font-sans bg-[#FAFAFA] relative overflow-x-hidden">
       
-      {/* HEADER SECTION */}
-      <header className="px-4 py-6 md:px-12 md:py-10 bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto">
-          
-          {/* Top Row: Welcome & Action */}
-          <div className="flex flex-row justify-between items-center mb-2">
-            <h1 className="text-xl md:text-3xl font-black tracking-tight text-black uppercase">
-              Welcome back!
-            </h1>
-            
-          
+      <header className="px-3 py-4 md:px-12 md:py-10 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto flex justify-between items-center mb-6 md:mb-8">
+          <div>
+            <h1 className="text-lg md:text-3xl font-black uppercase">Welcome back!</h1>
+            <p className="text-black/70 font-medium text-xs md:text-sm">Plan. Execute. Archive.</p> 
           </div>
+        </div>
 
-          {/* NEW PARAGRAPH */}
-          <p className="text-black/70 font-medium text-sm md:text-base mb-8">
-            Here's what we're tackling based on your bandwidth today.
-          </p>
-
-          {/* FILTER BAR */}
-          <div className="flex flex-wrap gap-2 p-1 bg-slate-50 rounded-xl w-full md:w-fit border border-slate-100">
-            {levels.map((level) => (
-              <button
-                key={level.id}
-                onClick={() => setActive(level.id)}
-                className={`flex-1 md:flex-none text-center whitespace-nowrap px-3 md:px-6 py-2 rounded-lg text-[12px] md:text-[13px] font-bold transition-all duration-200 ${
-                  active === level.id 
-                    ? `${level.color} shadow-sm ring-1 ring-white/50` 
-                    : 'text-black/60 hover:text-slate-700'
-                }`}
-              >
-                {level.label}
-              </button>
-            ))}
-          </div>
+        <div className="max-w-7xl mx-auto flex gap-1 md:gap-2 p-1 bg-slate-50 rounded-xl w-fit border border-slate-100 overflow-x-auto">
+          {levels.map((l) => (
+            <button key={l.id} onClick={() => setActive(l.id)} className={`px-3 md:px-4 lg:px-6 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${active === l.id ? l.color : 'text-black/40'}`}>
+              {l.label}
+            </button>
+          ))}
         </div>
       </header>
 
-      {/* MAIN CONTENT */}
-      <main className="max-w-7xl mx-auto  py-6 md:px-12 md:py-8">
-        
-        {/* Dynamic Status Message */}
-        <div className="mb-6">
-          <p className="text-black/60 font-bold text-sm md:text-base border-l-4 border-blue-500 pl-3">
-            {getStatusMessage()}
-          </p>
-        </div>
+      <main className="max-w-7xl mx-auto px-3 py-6 md:px-12 md:py-8">
+        <MomentumBar progress={progress} completedCount={completedTasks.length} totalCount={tasks.length} />
 
-        {/* TASK GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {filteredTasks.map((task) => (
-            <div 
-              key={task.id} 
-              className="bg-white p-5 md:p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between w-full"
-            >
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
-                    task.energy === 'high' ? 'bg-orange-100 text-orange-700' : 
-                    task.energy === 'mid' ? 'bg-blue-100 text-blue-700' : 
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    {task.energy === 'high' ? 'High Power' : task.energy === 'mid' ? 'Medium' : 'Low Energy'}
-                  </span>
-                  <div className="flex items-center gap-1 text-slate-400">
-                    <Clock size={12} />
-                    <span className="text-[10px] font-bold">{task.time}</span>
-                  </div>
-                </div>
-                
-                <h3 className="text-lg font-bold leading-tight mb-1 text-black/90">
-                  {task.title}
-                </h3>
-                <p className="text-black/60 text-[10px] font-bold uppercase tracking-[0.1em]">
-                  {task.category}
-                </p>
-              </div>
-
-              <button className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-between group cursor-pointer">
-                <span className="text-xs font-bold text-slate-500 group-hover:text-blue-600 transition-colors">
-                  View Breakdown
-                </span>
-                <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-600 transition-transform group-hover:translate-x-1" />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* EMPTY STATE */}
-        {filteredTasks.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-[32px] border-2 border-dashed border-slate-100 mt-4 px-4">
-            <p className="text-slate-400 font-bold italic text-sm">No tasks currently in this energy zone.</p>
+        {filteredTasks.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {filteredTasks.map(task => (
+              <TaskCard 
+                key={task.id} 
+                task={task} 
+                onComplete={onCompleteTask}
+                onDelete={onDeleteTask}
+              />
+            ))}
           </div>
+        ) : (
+          <EmptyState totalTasks={tasks.length} />
         )}
       </main>
     </div>
   );
 }
+
+// Small helper component for the empty screen
+const EmptyState = ({ totalTasks }: { totalTasks: number }) => (
+  <div className="flex flex-col items-center justify-center py-16 md:py-24 bg-white rounded-[32px] md:rounded-[40px] border-2 border-dashed border-slate-100 mx-4 md:mx-0">
+    <Inbox className="text-slate-300 mb-4 w-8 h-8 md:w-10 md:h-10" />
+    <h3 className="text-lg md:text-xl font-bold text-black/80 text-center px-4">{totalTasks > 0 ? "You're all caught up!" : "Nothing here yet"}</h3>
+    <p className="text-slate-400 text-xs md:text-sm max-w-[240px] text-center mt-2 px-4">
+      {totalTasks > 0 ? "Check your Trophy for wins!" : "Add a task to start your daily momentum."}
+    </p>
+  </div>
+);

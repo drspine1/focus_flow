@@ -18,10 +18,10 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
   const hasSubtasks = task.subtasks && task.subtasks.length > 0;
 
   return (
-    <div className="bg-white p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-black transition-all flex flex-col group relative">
+    <div className="bg-white p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-black/20 transition-all flex flex-col group relative">
       <button 
         onClick={() => onDelete(task.id)}
-        className="absolute top-4 right-4 p-2 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+        className="absolute top-4 right-4 p-2 text-red-500 transition-colors opacity-0 group-hover:opacity-100"
       >
         <Trash2 size={16} />
       </button>
@@ -34,7 +34,7 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
           }`}>
             {task.energy} Power
           </span>
-          <button onClick={() => onComplete(task.id)} className="mr-8 text-slate-200 hover:text-blue-600 transition-all hover:scale-110 active:scale-95">
+          <button onClick={() => onComplete(task.id)} className="mr-8 text-blue-600 md:text-slate-300 hover:text-blue-600 transition-all hover:scale-110 active:scale-95">
             <Circle size={24} />
           </button>
         </div>
@@ -52,7 +52,7 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
             <span className="text-xs font-bold text-slate-500 group-hover/btn:text-black transition-colors">
               {isExpanded ? "Hide Breakdown" : `View Breakdown (${task.subtasks.length})`}
             </span>
-            <ChevronDown size={16} className={`text-slate-300 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            <ChevronDown size={16} className={`text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
           </button>
 
           {isExpanded && (
@@ -61,10 +61,10 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
                 <div 
                   key={sub.id} 
                   onClick={() => onToggleSubtask(task.id, sub.id)}
-                  className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/50 hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="flex items-center gap-2 p-2 rounded-xl bg-slate-100 transition-colors cursor-pointer"
                 >
-                  {sub.isCompleted ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-300" />}
-                  <span className={`text-[11px] font-medium ${sub.isCompleted ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+                  {sub.isCompleted ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-400" />}
+                  <span className={` font-medium ${sub.isCompleted ? 'text-slate-400 line-through text-xs' : 'text-sm text-slate-800 '}`}>
                     {sub.title}
                   </span>
                 </div>

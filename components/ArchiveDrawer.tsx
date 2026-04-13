@@ -32,7 +32,7 @@ export const ArchiveDrawer = ({ isOpen, onClose, tasks, onDelete }: ArchiveDrawe
                 <p className="font-bold text-sm text-slate-800 line-through decoration-slate-300">{task.title}</p>
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{task.energy} Power</span>
-                  <button onClick={() => onDelete(task.id)} className="text-slate-600 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
+                  <button onClick={() => onDelete(task.id)} className="text-red-500 md:text-slate-600 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
                 </div>
               </div>
             </div>

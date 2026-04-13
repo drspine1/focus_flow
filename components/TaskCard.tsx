@@ -20,11 +20,11 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
   return (
     <div className="bg-white p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-black/20 transition-all flex flex-col group relative">
       <button 
-        onClick={() => onDelete(task.id)}
-        className="absolute top-4 right-4 p-2 text-red-500 transition-colors opacity-0 group-hover:opacity-100"
-      >
-        <Trash2 size={16} />
-      </button>
+  onClick={() => onDelete(task.id)}
+  className="absolute top-4 right-4 p-2 text-red-500 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100"
+>
+  <Trash2 size={16} />
+</button>
 
       <div>
         <div className="flex justify-between items-center mb-4">

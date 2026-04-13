@@ -67,7 +67,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
             />
           </div>
 
-          {/* ENERGY LEVEL SELECTION - DAY 7 REQUIREMENT */}
+          
           <div>
             <label className="text-[10px] font-black uppercase text-black/60 block mb-3 tracking-widest">Energy Level</label>
             <div className="grid grid-cols-3 gap-3">
@@ -79,7 +79,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
                   className={`py-3 rounded-2xl border-2 transition-all flex flex-col items-center gap-1 capitalize font-bold text-xs ${
                     newEnergy === level 
                       ? "border-black bg-black text-white" 
-                      : "border-slate-100 bg-slate-50 text-slate-black/80 hover:border-slate-200"
+                      : "border-slate-100 bg-slate-50 text-black/80 hover:border-slate-200"
                   }`}
                 >
                  
@@ -115,7 +115,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all">
+          <button type="submit" className="w-full text-sm bg-black text-white py-4 rounded-2xl font-black uppercase  shadow-lg shadow-black/10 active:scale-95 transition-all">
             Start Momentum
           </button>
         </form>

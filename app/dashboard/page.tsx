@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox } from "lucide-react";
+import { Inbox, ArrowUpDown } from "lucide-react";
 
-// Import our new components
+// Import our components
 import MomentumBar from "@/components/MomentumBar";
 import { TaskCard } from "@/components/TaskCard";
+import EnergyChart from "@/components/EnergyChart"; // Day 8 Component
 import { useTasks } from "./layout";
 
 const levels = [
@@ -17,13 +18,45 @@ const levels = [
 
 export default function Dashboard() {
   const [active, setActive] = useState<string>('all');
-  const { tasks, onCompleteTask, onDeleteTask } = useTasks();
+  const [sortBy, setSortBy] = useState<'newest' | 'energy'>('newest');
+
+  const { tasks, setTasks, onCompleteTask, onDeleteTask } = useTasks();
 
   const completedTasks = tasks.filter(t => t.isCompleted);
   const activeTasks = tasks.filter(t => !t.isCompleted);
   const progress = tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0;
 
-  const filteredTasks = activeTasks.filter(t => active === 'all' || t.energy === active);
+  const filteredAndSortedTasks = activeTasks
+    .filter(t => active === 'all' || t.energy === active)
+    .sort((a, b) => {
+      if (sortBy === 'newest') {
+        const timeA = (a as any).createdAt || 0;
+        const timeB = (b as any).createdAt || 0;
+        return timeB - timeA;
+      }
+      if (sortBy === 'energy') {
+        const weights = { high: 3, mid: 2, low: 1 };
+        return weights[b.energy as keyof typeof weights] - weights[a.energy as keyof typeof weights];
+      }
+      return 0;
+    });
+
+  const handleToggleSubtask = (taskId: string, subtaskId: string) => {
+    setTasks((prevTasks: any[]) =>
+      prevTasks.map((task) => {
+        if (task.id !== taskId) return task;
+        const updatedSubtasks = task.subtasks.map((sub: any) =>
+          sub.id === subtaskId ? { ...sub, isCompleted: !sub.isCompleted } : sub
+        );
+        const allDone = updatedSubtasks.length > 0 && updatedSubtasks.every((s: any) => s.isCompleted);
+        return { 
+          ...task, 
+          subtasks: updatedSubtasks,
+          isCompleted: allDone ? true : task.isCompleted 
+        };
+      })
+    );
+  };
 
   return (
     <div className="min-h-screen text-slate-900 pb-10 font-sans bg-[#FAFAFA] relative overflow-x-hidden">
@@ -33,6 +66,18 @@ export default function Dashboard() {
           <div>
             <h1 className="text-lg md:text-3xl font-black uppercase">Welcome back!</h1>
             <p className="text-black/70 font-medium text-xs md:text-sm">Plan. Execute. Archive.</p> 
+          </div>
+
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl">
+            <ArrowUpDown size={14} className="text-slate-400" />
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'newest' | 'energy')}
+              className="bg-transparent text-xs font-bold outline-none cursor-pointer text-slate-600"
+            >
+              <option value="newest">Newest First</option>
+              <option value="energy">Highest Energy</option>
+            </select>
           </div>
         </div>
 
@@ -46,16 +91,25 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 py-6 md:px-12 md:py-8">
-        <MomentumBar progress={progress} completedCount={completedTasks.length} totalCount={tasks.length} />
+        {/* DAY 8 VISUAL LAYOUT: Momentum Bar + Energy Chart */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-start">
+          <div className="lg:col-span-2">
+            <MomentumBar progress={progress} completedCount={completedTasks.length} totalCount={tasks.length} />
+          </div>
+          <div className="lg:col-span-1">
+            <EnergyChart tasks={tasks} />
+          </div>
+        </div>
 
-        {filteredTasks.length > 0 ? (
+        {filteredAndSortedTasks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {filteredTasks.map(task => (
+            {filteredAndSortedTasks.map(task => (
               <TaskCard 
                 key={task.id} 
                 task={task} 
                 onComplete={onCompleteTask}
                 onDelete={onDeleteTask}
+                onToggleSubtask={handleToggleSubtask}
               />
             ))}
           </div>
@@ -67,11 +121,10 @@ export default function Dashboard() {
   );
 }
 
-// Small helper component for the empty screen
 const EmptyState = ({ totalTasks }: { totalTasks: number }) => (
   <div className="flex flex-col items-center justify-center py-16 md:py-24 bg-white rounded-[32px] md:rounded-[40px] border-2 border-dashed border-slate-100 mx-4 md:mx-0">
     <Inbox className="text-slate-400 mb-4 w-8 h-8 md:w-10 md:h-10" />
-    <h3 className="text-lg md:text-xl font-bold text-black/80 text-center px-4">{totalTasks > 0 ? "You're all caught up!" : "No! tasks yet "}</h3>
+    <h3 className="text-lg md:text-xl font-bold text-black/80 text-center px-4">{totalTasks > 0 ? "You're all caught up!" : "No tasks yet"}</h3>
     <p className="text-slate-500 text-xs md:text-sm max-w-[240px] text-center mt-2 px-4">
       {totalTasks > 0 ? "Check your Trophy for wins!" : "Add a task to start your daily momentum."}
     </p>

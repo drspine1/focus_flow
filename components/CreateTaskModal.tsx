@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, FC } from 'react';
-import { X } from "lucide-react";
-import { Task } from "@/types";
+import { X, Plus, Trash2, Zap } from "lucide-react"; // Added Zap icon
+import { Task, SubTask } from "@/types";
 
 interface CreateTaskModalProps {
   onClose: () => void;
@@ -11,96 +11,112 @@ interface CreateTaskModalProps {
 
 const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
   const [newTitle, setNewTitle] = useState("");
-  const [newEnergy, setNewEnergy] = useState<"low" | "mid" | "high">("mid");
+  const [newEnergy, setNewEnergy] = useState<"low" | "mid" | "high">("mid"); // Energy state
+  const [subtaskList, setSubtaskList] = useState<string[]>([]);
+  const [subtaskInput, setSubtaskInput] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const addSubtask = () => {
+    if (!subtaskInput.trim()) return;
+    setSubtaskList([...subtaskList, subtaskInput.trim()]);
+    setSubtaskInput("");
+  };
+
+  const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
 
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
+    const finalSubtasks: SubTask[] = subtaskList.map(st => ({
+      id: crypto.randomUUID(),
+      title: st,
+      isCompleted: false
+    }));
 
     const newTask: Task = {
       id: crypto.randomUUID(),
       title: newTitle,
-      energy: newEnergy,
-      category: "General", // You can add a category state later!
-      time: timeString,
+      energy: newEnergy, // Uses the selected energy
+      category: "General",
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       isCompleted: false,
-      // @ts-ignore - added for the 24h persistence logic
-      createdAt: Date.now(),
+      createdAt: Date.now(), // Essential for "Newest First" sorting
+      subtasks: finalSubtasks
     };
 
     onAdd(newTask);
-    setNewTitle("");
     onClose();
   };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-lg rounded-[32px] p-6 md:p-8 shadow-2xl animate-in slide-in-from-bottom-10">
-        
-        {/* Modal Header */}
+      <div className="bg-white w-full max-w-lg rounded-[32px] p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-black uppercase tracking-tight text-black">
-            Create Task
-          </h2>
-          <button 
-            onClick={onClose} 
-            className="p-2 bg-slate-100 rounded-full text-slate-400 hover:text-black transition-colors"
-          >
-            <X size={20} />
-          </button>
+          <h2 className="text-2xl font-black uppercase text-black">Create Task</h2>
+          <button onClick={onClose} className="p-2 bg-slate-100 rounded-full"><X size={20} /></button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title Input */}
+        <form onSubmit={handleConfirm} className="space-y-6">
+          {/* GOAL INPUT */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/80 block mb-2">
-              Task Title
-            </label>
+            <label className="text-[10px] font-black uppercase text-black/40 block mb-2 tracking-widest">Goal</label>
             <input 
               autoFocus
-              type="text" 
-              placeholder="What's the goal?"
-              className="w-full bg-slate-100 border border-slate-100 rounded-2xl p-4 font-normal text-black focus:ring-2 focus:ring-black outline-none transition-all"
+              className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-black"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="What are we doing?"
             />
           </div>
 
-          {/* Energy Level Selector */}
+          {/* ENERGY LEVEL SELECTION - DAY 7 REQUIREMENT */}
           <div>
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-black/80 block mb-3">
-              Energy Level
-            </label>
+            <label className="text-[10px] font-black uppercase text-black/40 block mb-3 tracking-widest">Energy Level</label>
             <div className="grid grid-cols-3 gap-3">
-              {(['low', 'mid', 'high'] as const).map((lvl) => (
+              {(['low', 'mid', 'high'] as const).map((level) => (
                 <button
-                  key={lvl}
+                  key={level}
                   type="button"
-                  onClick={() => setNewEnergy(lvl)}
-                  className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                    newEnergy === lvl 
-                      ? 'bg-black/90 text-white shadow-lg shadow-black/20 scale-[1.02]' 
-                      : 'bg-slate-50 text-black/70 hover:bg-slate-100'
+                  onClick={() => setNewEnergy(level)}
+                  className={`py-3 rounded-2xl border-2 transition-all flex flex-col items-center gap-1 capitalize font-bold text-xs ${
+                    newEnergy === level 
+                      ? "border-black bg-black text-white" 
+                      : "border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200"
                   }`}
                 >
-                  {lvl}
+                 
+                  {level}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Submit Button */}
-          <button 
-            type="submit" 
-            className="w-full bg-black/90 text-white py-4 rounded-2xl font-black uppercase text-sm hover:bg-slate-800 transition-all active:scale-[0.98]"
-          >
-            Confirm Task
+          {/* SUBTASK INPUT */}
+          <div>
+            <label className="text-[10px] font-black uppercase text-black/40 block mb-2 tracking-widest">Breakdown (Optional)</label>
+            <div className="flex gap-2">
+              <input 
+                className="flex-1 bg-slate-50 border border-slate-100 rounded-xl p-3 text-sm outline-none"
+                value={subtaskInput}
+                onChange={(e) => setSubtaskInput(e.target.value)}
+                placeholder="Step 1, Step 2..."
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSubtask())}
+              />
+              <button type="button" onClick={addSubtask} className="p-3 bg-black text-white rounded-xl hover:bg-slate-800"><Plus size={20} /></button>
+            </div>
+            
+            <div className="mt-4 space-y-2">
+              {subtaskList.map((st, i) => (
+                <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <span className="text-xs font-bold text-slate-600">{st}</span>
+                  <button type="button" onClick={() => setSubtaskList(subtaskList.filter((_, idx) => idx !== i))}>
+                    <Trash2 size={14} className="text-red-400" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button type="submit" className="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all">
+            Start Momentum
           </button>
         </form>
       </div>

@@ -51,25 +51,25 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
       <div className="bg-white w-full max-w-lg rounded-[32px] p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-black uppercase text-black">Create Task</h2>
-          <button onClick={onClose} className="p-2 bg-slate-100 rounded-full"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 bg-slate-100 text-slate-600 rounded-full"><X size={20} /></button>
         </div>
 
         <form onSubmit={handleConfirm} className="space-y-6">
           {/* GOAL INPUT */}
           <div>
-            <label className="text-[10px] font-black uppercase text-black/40 block mb-2 tracking-widest">Goal</label>
+            <label className="text-[10px] font-black uppercase text-black/60 block mb-2 tracking-widest">Goal</label>
             <input 
               autoFocus
-              className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-black"
+              className="w-full bg-slate-50 border text-base text-black/70 placeholder:text-slate-500 border-slate-200 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-black"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="What are we doing?"
+              placeholder="What are we doing today..?"
             />
           </div>
 
           {/* ENERGY LEVEL SELECTION - DAY 7 REQUIREMENT */}
           <div>
-            <label className="text-[10px] font-black uppercase text-black/40 block mb-3 tracking-widest">Energy Level</label>
+            <label className="text-[10px] font-black uppercase text-black/60 block mb-3 tracking-widest">Energy Level</label>
             <div className="grid grid-cols-3 gap-3">
               {(['low', 'mid', 'high'] as const).map((level) => (
                 <button
@@ -79,7 +79,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
                   className={`py-3 rounded-2xl border-2 transition-all flex flex-col items-center gap-1 capitalize font-bold text-xs ${
                     newEnergy === level 
                       ? "border-black bg-black text-white" 
-                      : "border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200"
+                      : "border-slate-100 bg-slate-50 text-slate-black/80 hover:border-slate-200"
                   }`}
                 >
                  
@@ -91,10 +91,10 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
 
           {/* SUBTASK INPUT */}
           <div>
-            <label className="text-[10px] font-black uppercase text-black/40 block mb-2 tracking-widest">Breakdown (Optional)</label>
+            <label className="text-[10px] font-black uppercase text-black/60 block mb-2 tracking-widest">Breakdown (Optional)</label>
             <div className="flex gap-2">
               <input 
-                className="flex-1 bg-slate-50 border border-slate-100 rounded-xl p-3 text-sm outline-none"
+                className="flex-1 bg-slate-50 border border-slate-100 placeholder:text-slate-500 text-black/70  rounded-xl p-3 text-sm outline-none"
                 value={subtaskInput}
                 onChange={(e) => setSubtaskInput(e.target.value)}
                 placeholder="Step 1, Step 2..."

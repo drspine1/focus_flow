@@ -21,7 +21,7 @@ export const ArchiveDrawer = ({ isOpen, onClose, tasks, onDelete }: ArchiveDrawe
             </h2>
             <p className="text-slate-600 text-xs font-bold mt-1">Completed in the last 24h</p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={24} /></button>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 text-slate-600 rounded-full transition-colors"><X size={24} /></button>
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
@@ -32,7 +32,7 @@ export const ArchiveDrawer = ({ isOpen, onClose, tasks, onDelete }: ArchiveDrawe
                 <p className="font-bold text-sm text-slate-800 line-through decoration-slate-300">{task.title}</p>
                 <div className="flex justify-between items-center mt-2">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{task.energy} Power</span>
-                  <button onClick={() => onDelete(task.id)} className="text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
+                  <button onClick={() => onDelete(task.id)} className="text-slate-600 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
                 </div>
               </div>
             </div>

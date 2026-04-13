@@ -10,7 +10,7 @@ const COLORS = {
 };
 
 export default function EnergyChart({ tasks }: { tasks: any[] }) {
-  const [mounted, setMounted] = useState(false); // 2. Mount state
+  const [mounted, setMounted] = useState(false); 
 
   useEffect(() => {
     setMounted(true);
@@ -27,11 +27,11 @@ export default function EnergyChart({ tasks }: { tasks: any[] }) {
 
   return (
     <div className="h-[300px] w-full bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm flex flex-col">
-      <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">
+      <h3 className="text-[10px] font-black uppercase tracking-widest text-black/80 mb-4">
         Active Energy Mix
       </h3>
       
-      <div className="flex-1 min-h-0"> {/* 5. Crucial: flex-1 and min-h-0 help Recharts calculate size */}
+      <div className="flex-1 min-h-0"> 
         {data.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -55,7 +55,7 @@ export default function EnergyChart({ tasks }: { tasks: any[] }) {
           </ResponsiveContainer>
         ) : (
           <div className="h-full flex items-center justify-center">
-            <p className="text-slate-400 text-xs font-medium">Add tasks to see distribution</p>
+            <p className="text-slate-500 text-xs font-medium">Add tasks to see distribution</p>
           </div>
         )}
       </div>

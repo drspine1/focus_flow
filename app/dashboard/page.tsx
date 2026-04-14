@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, ArrowUpDown } from "lucide-react";
+import { Inbox, ArrowUpDown, Target } from "lucide-react"; // Added Target icon
 
 // Import our components
 import MomentumBar from "@/components/MomentumBar";
 import { TaskCard } from "@/components/TaskCard";
-import EnergyChart from "@/components/EnergyChart"; // Day 8 Component
+import EnergyChart from "@/components/EnergyChart";
+import CircularProgress from "@/components/CircularProgress"; // Day 9 Component
 import { useTasks } from "./layout";
 
 const levels = [
@@ -91,11 +92,30 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 py-6 md:px-12 md:py-8">
-        {/* DAY 8 VISUAL LAYOUT: Momentum Bar + Energy Chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-start">
-          <div className="lg:col-span-2">
+        
+        {/* NEW DAY 9 VISUAL GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 items-stretch">
+          
+          <div className="lg:col-span-2 space-y-6">
             <MomentumBar progress={progress} completedCount={completedTasks.length} totalCount={tasks.length} />
+            
+            {/* The "Boss Bar" Circular Section */}
+            <div className="bg-white p-8 rounded-[32px] border border-slate-100 flex flex-col md:flex-row items-center justify-between shadow-sm gap-8">
+              <div className="text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                   <Target className="text-blue-600" size={20} />
+                   <h3 className="text-xl font-black uppercase italic tracking-tight">Daily Target</h3>
+                </div>
+                <p className="text-slate-500 text-sm font-medium max-w-[200px]">
+                  You have completed <span className="text-black font-bold">{completedTasks.length}</span> out of <span className="text-black font-bold">{tasks.length}</span> missions today.
+                </p>
+              </div>
+              <div className="bg-slate-50 p-6 rounded-[40px]">
+                <CircularProgress progress={progress} size={140} />
+              </div>
+            </div>
           </div>
+
           <div className="lg:col-span-1">
             <EnergyChart tasks={tasks} />
           </div>

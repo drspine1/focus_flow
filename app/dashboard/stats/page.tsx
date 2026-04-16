@@ -35,8 +35,8 @@ export default function AnalyticsPage() {
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black uppercase italic tracking-tight">Performance Stats</h1>
-          <p className="text-slate-500 font-medium">Visualizing your productivity patterns.</p>
+          <h1 className="text-3xl text-black uppercase italic tracking-tight">Performance Stats</h1>
+          <p className="text-slate-700 font-medium">Visualizing your productivity patterns.</p>
         </div>
         {metrics.completedCount > 0 && (
           <div className="bg-orange-500 text-white shadow-lg shadow-orange-100 px-4 py-2 rounded-2xl text-xs font-black uppercase tracking-widest text-center self-start md:self-auto">
@@ -83,9 +83,9 @@ export default function AnalyticsPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <BarChart3 className="text-blue-600" size={18} />
-              <h3 className="md:text-xl text-[16px] font-bold uppercase tracking-tight">Weekly Momentum</h3>
+              <h3 className="md:text-xl text-[16px] font-bold uppercase text-black tracking-tight">Weekly Momentum</h3>
             </div>
-            <p className="text-slate-400 text-sm max-w-xs">
+            <p className="text-slate-700 text-sm max-w-xs">
               Live activity tracking based on current task volume.
             </p>
           </div>

@@ -6,8 +6,8 @@ import { Inbox, ArrowUpDown, Zap } from "lucide-react";
 // Components
 import { TaskCard } from "@/components/TaskCard";
 import MomentumBar from "@/components/MomentumBar"; 
+import Assistant from "@/components/Assistant"; // Added this import
 import { useTasks } from "./layout";
-import { p } from "framer-motion/client";
 
 const levels = [
   { id: 'all', label: 'All', color: 'bg-white text-black ring-1 ring-slate-200' },
@@ -106,8 +106,14 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Task Grid */}
+        {/* Task Grid + AI Assistant Integration */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          {/* AI ASSISTANT CARD - Day 13/14 Placement */}
+          <div className="col-span-1">
+             <Assistant />
+          </div>
+
           {filteredAndSortedTasks.length > 0 ? (
             filteredAndSortedTasks.map(task => (
               <TaskCard 
@@ -119,7 +125,7 @@ export default function Dashboard() {
               />
             ))
           ) : (
-            <div className="col-span-full">
+            <div className="col-span-full lg:col-span-2">
               <EmptyState totalTasks={tasks.length} />
             </div>
           )}
@@ -130,16 +136,13 @@ export default function Dashboard() {
 }
 
 const EmptyState = ({ totalTasks }: { totalTasks: number }) => (
-  <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[40px] border-2 border-dashed border-slate-100">
+  <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[40px] border-2 border-dashed border-slate-100 w-full">
     <Inbox className="text-slate-400 mb-4" size={48} />
-    <h3 className="text-lg font-bold text-slate-600">
+    <h3 className="text-lg font-bold text-slate-600 text-center">
       {totalTasks > 0 ? "Daily missions cleared!" : (
         <>
-          <div className="text-center">
-            <p className="text-black">No tasks yet</p>
+          <p className="text-black">No tasks yet</p>
           <p className="text-black/70 text-sm">Add a task to start your daily momentum.</p>
-
-          </div>
         </>
       )}
     </h3>

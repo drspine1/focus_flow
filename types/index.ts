@@ -5,6 +5,7 @@ export interface SubTask {
   id: string;
   title: string;
   isCompleted: boolean;
+  energy?: "low" | "mid" | "high";
 }
 
 export interface Task {

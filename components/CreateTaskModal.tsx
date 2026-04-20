@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, FC } from 'react';
-import { X, Plus, Trash2, Zap } from "lucide-react"; // Added Zap icon
+import { X, Plus, Trash2, Sparkles, Loader2 } from "lucide-react";
 import { Task, SubTask } from "@/types";
 
 interface CreateTaskModalProps {
@@ -11,14 +11,59 @@ interface CreateTaskModalProps {
 
 const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
   const [newTitle, setNewTitle] = useState("");
-  const [newEnergy, setNewEnergy] = useState<"low" | "mid" | "high">("mid"); // Energy state
-  const [subtaskList, setSubtaskList] = useState<string[]>([]);
+  const [newEnergy, setNewEnergy] = useState<"low" | "mid" | "high">("mid");
+  const [subtaskList, setSubtaskList] = useState<{ title: string; energy?: "low" | "mid" | "high" }[]>([]);
   const [subtaskInput, setSubtaskInput] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiError, setAiError] = useState("");
 
   const addSubtask = () => {
     if (!subtaskInput.trim()) return;
-    setSubtaskList([...subtaskList, subtaskInput.trim()]);
+    setSubtaskList([...subtaskList, { title: subtaskInput.trim() }]);
     setSubtaskInput("");
+  };
+
+  const generateSubtasks = async () => {
+    if (!newTitle.trim()) return;
+    setIsGenerating(true);
+    setAiError("");
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: newTitle }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setAiError(data.error || "Something went wrong. Try again!");
+        return;
+      }
+
+      if (data.subtasks && Array.isArray(data.subtasks)) {
+        setSubtaskList(data.subtasks.map((st: any) => ({ title: st.title, energy: st.energy })));
+        
+        // Auto-set energy level based on most common energy across subtasks
+        const energyLevels = data.subtasks.map((st: any) => st.energy);
+        const energyCounts = energyLevels.reduce((acc: any, level: string) => {
+          acc[level] = (acc[level] || 0) + 1;
+          return acc;
+        }, {});
+        const mostCommonEnergy = Object.keys(energyCounts).reduce((a, b) => 
+          energyCounts[a] > energyCounts[b] ? a : b
+        ) as "low" | "mid" | "high";
+        
+        setNewEnergy(mostCommonEnergy);
+      } else {
+        setAiError("Couldn't generate steps. Try again!");
+      }
+    } catch {
+      setAiError("Failed to connect. Try again!");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleConfirm = (e: React.FormEvent) => {
@@ -27,18 +72,19 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
 
     const finalSubtasks: SubTask[] = subtaskList.map(st => ({
       id: crypto.randomUUID(),
-      title: st,
+      title: st.title,
+      energy: st.energy,
       isCompleted: false
     }));
 
     const newTask: Task = {
       id: crypto.randomUUID(),
       title: newTitle,
-      energy: newEnergy, // Uses the selected energy
+      energy: newEnergy,
       category: "General",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       isCompleted: false,
-      createdAt: Date.now(), // Essential for "Newest First" sorting
+      createdAt: Date.now(),
       subtasks: finalSubtasks
     };
 
@@ -67,7 +113,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
             />
           </div>
 
-          
           <div>
             <label className="text-[10px] font-black uppercase text-black/60 block mb-3 tracking-widest">Energy Level</label>
             <div className="grid grid-cols-3 gap-3">
@@ -82,7 +127,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
                       : "border-slate-100 bg-slate-50 text-black/80 hover:border-slate-200"
                   }`}
                 >
-                 
                   {level}
                 </button>
               ))}
@@ -91,10 +135,30 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
 
           {/* SUBTASK INPUT */}
           <div>
-            <label className="text-[10px] font-black uppercase text-black/60 block mb-2 tracking-widest">Breakdown (Optional)</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[10px] font-black uppercase text-black/60 tracking-widest">Breakdown (Optional)</label>
+              {/* MAGIC WAND BUTTON */}
+              <button
+                type="button"
+                onClick={generateSubtasks}
+                disabled={isGenerating || !newTitle.trim()}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-violet-500 to-blue-500 text-white text-[10px] font-black uppercase tracking-wider rounded-full disabled:opacity-40 hover:opacity-90 transition-all active:scale-95"
+              >
+                {isGenerating 
+                  ? <><Loader2 size={11} className="animate-spin" /> Generating...</>
+                  : <><Sparkles size={11} /> AI Generate</>
+                }
+              </button>
+            </div>
+
+            {/* AI ERROR */}
+            {aiError && (
+              <p className="text-[11px] text-red-500 font-medium mb-2">{aiError}</p>
+            )}
+
             <div className="flex gap-2">
               <input 
-                className="flex-1 bg-slate-50 border border-slate-100 placeholder:text-slate-500 text-black/70  rounded-xl p-3 text-sm outline-none"
+                className="flex-1 bg-slate-50 border border-slate-100 placeholder:text-slate-500 text-black/70 rounded-xl p-3 text-sm outline-none"
                 value={subtaskInput}
                 onChange={(e) => setSubtaskInput(e.target.value)}
                 placeholder="Step 1, Step 2..."
@@ -106,16 +170,27 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
             <div className="mt-4 space-y-2">
               {subtaskList.map((st, i) => (
                 <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
-                  <span className="text-xs font-bold text-slate-600">{st}</span>
-                  <button type="button" onClick={() => setSubtaskList(subtaskList.filter((_, idx) => idx !== i))}>
-                    <Trash2 size={14} className="text-red-400" />
-                  </button>
+                  <span className="text-xs font-bold text-slate-600">{st.title}</span>
+                  <div className="flex items-center gap-2">
+                    {st.energy && (
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-tighter ${
+                        st.energy === 'high' ? 'bg-orange-100 text-orange-600' :
+                        st.energy === 'mid'  ? 'bg-blue-100 text-blue-600' :
+                                               'bg-green-100 text-green-600'
+                      }`}>
+                        {st.energy}
+                      </span>
+                    )}
+                    <button type="button" onClick={() => setSubtaskList(subtaskList.filter((_, idx) => idx !== i))}>
+                      <Trash2 size={14} className="text-red-400" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <button type="submit" className="w-full text-sm bg-black text-white py-4 rounded-2xl font-black uppercase  shadow-lg shadow-black/10 active:scale-95 transition-all">
+          <button type="submit" className="w-full text-sm bg-black text-white py-4 rounded-2xl font-black uppercase shadow-lg shadow-black/10 active:scale-95 transition-all">
             Start Momentum
           </button>
         </form>

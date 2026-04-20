@@ -6,7 +6,6 @@ import { Inbox, ArrowUpDown, Zap } from "lucide-react";
 // Components
 import { TaskCard } from "@/components/TaskCard";
 import MomentumBar from "@/components/MomentumBar"; 
-import Assistant from "@/components/Assistant"; // Added this import
 import { useTasks } from "./layout";
 
 const levels = [
@@ -106,14 +105,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Task Grid + AI Assistant Integration */}
+        {/* Task Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
-          {/* AI ASSISTANT CARD - Day 13/14 Placement */}
-          <div className="col-span-1">
-             <Assistant />
-          </div>
-
           {filteredAndSortedTasks.length > 0 ? (
             filteredAndSortedTasks.map(task => (
               <TaskCard 

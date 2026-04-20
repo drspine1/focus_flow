@@ -64,9 +64,18 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
                   className="flex items-center gap-2 p-2 rounded-xl bg-slate-100 transition-colors cursor-pointer"
                 >
                   {sub.isCompleted ? <CheckCircle2 size={14} className="text-green-500" /> : <Circle size={14} className="text-slate-400" />}
-                  <span className={` font-medium ${sub.isCompleted ? 'text-slate-400 line-through text-xs' : 'text-sm text-slate-800 '}`}>
+                  <span className={`flex-1 font-medium ${sub.isCompleted ? 'text-slate-400 line-through text-xs' : 'text-sm text-slate-800'}`}>
                     {sub.title}
                   </span>
+                  {sub.energy && (
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-tighter ${
+                      sub.energy === 'high' ? 'bg-orange-100 text-orange-600' :
+                      sub.energy === 'mid'  ? 'bg-blue-100 text-blue-600' :
+                                             'bg-green-100 text-green-600'
+                    }`}>
+                      {sub.energy}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>

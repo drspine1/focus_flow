@@ -25,6 +25,11 @@ export default function Assistant() {
       
       const data = await res.json();
 
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Try again!");
+        return;
+      }
+
       // Check for the 'subtasks' array we defined in our backend prompt
       if (data.subtasks && Array.isArray(data.subtasks)) {
         setTasks(data.subtasks);

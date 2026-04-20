@@ -23,7 +23,7 @@ export async function POST(req: Request) {
                 properties: {
                   id: { type: SchemaType.STRING },
                   title: { type: SchemaType.STRING },
-                  energy: { type: SchemaType.STRING, enum: ["low", "mid", "high"] }
+                  energy: { type: SchemaType.STRING, format: "enum", enum: ["low", "mid", "high"] }
                 },
                 required: ["id", "title", "energy"]
               }

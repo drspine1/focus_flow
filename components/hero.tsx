@@ -34,28 +34,35 @@ export default function HeroSection() {
       {/* Challenge Badge - Simple Fade In */}
   {/* Challenge Badge - Hanging/Dangling Effect */}
       <motion.div 
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -30 }}
         animate={{ 
           opacity: 1, 
-          y: 0,
-          rotate: [0, -3, 3, -2, 2, 0], // The "dangle" sequence
+          y: [0, -6, 0],
         }}
         transition={{
           opacity: { duration: 0.5 },
-          y: { duration: 0.5 },
-          rotate: {
+          y: {
             delay: 0.5,
-            duration: 4,
-            repeat: Infinity, // Keeps it dangling
+            duration: 2.5,
+            repeat: Infinity,
             ease: "easeInOut",
           }
         }}
-        style={{ originY: 0 }} // Sets the "hinge" at the top
         className="z-10 max-w-5xl w-full flex justify-center lg:justify-between font-mono text-sm mb-12 lg:mb-0"
       >
-        <p className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm">
-          Day 14: #ENg30DayChallenge
-        </p>
+        <motion.p
+          animate={{
+            boxShadow: [
+              "0 0 0px rgba(99,102,241,0)",
+              "0 0 18px rgba(99,102,241,0.6)",
+              "0 0 0px rgba(99,102,241,0)",
+            ],
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
+        >
+          ✦ Day 16: #ENg30DayChallenge ✦
+        </motion.p>
       </motion.div>
 
       {/* Hero Section Container */}

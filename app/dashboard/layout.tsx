@@ -51,7 +51,14 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (isMounted.current) {
-      localStorage.setItem("focusflow_tasks", JSON.stringify(tasks));
+      try {
+        // Only persist active tasks to keep storage lean
+        const activeTasks = tasks.filter(t => !t.isCompleted);
+        localStorage.setItem("focusflow_tasks", JSON.stringify(activeTasks));
+      } catch (e) {
+        console.warn("localStorage quota exceeded, clearing old data...");
+        localStorage.removeItem("focusflow_tasks");
+      }
     }
   }, [tasks]);
 

@@ -168,7 +168,16 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
             </div>
             
             <div className="mt-4 space-y-2">
-              {subtaskList.map((st, i) => (
+              {/* SKELETON LOADER */}
+              {isGenerating && Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+                  <div className="flex-1 h-3 rounded-full bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite]" style={{ animationDelay: `${i * 0.1}s` }} />
+                  <div className="ml-3 w-8 h-5 rounded-md bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 bg-[length:200%_100%] animate-[shimmer_1.5s_infinite]" style={{ animationDelay: `${i * 0.1}s` }} />
+                </div>
+              ))}
+
+              {/* REAL SUBTASKS */}
+              {!isGenerating && subtaskList.map((st, i) => (
                 <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
                   <span className="text-xs font-bold text-slate-600">{st.title}</span>
                   <div className="flex items-center gap-2">

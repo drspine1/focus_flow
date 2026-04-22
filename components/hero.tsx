@@ -61,7 +61,7 @@ export default function HeroSection() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
         >
-          ✦ Day 16: #ENg30DayChallenge ✦
+          ✦ Day 17: #ENg30DayChallenge ✦
         </motion.p>
       </motion.div>
 

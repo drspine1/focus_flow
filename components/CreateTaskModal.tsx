@@ -1,8 +1,54 @@
 "use client";
 
 import React, { useState, FC } from 'react';
-import { X, Plus, Trash2, Sparkles, Loader2 } from "lucide-react";
+import { X, Plus, Trash2, Sparkles, Loader2, Clock, WifiOff, AlertTriangle, RotateCcw } from "lucide-react";
 import { Task, SubTask } from "@/types";
+
+// Task 1.1 — AiErrorState discriminated union
+type AiErrorState =
+  | { type: "none" }
+  | { type: "rate-limit" }
+  | { type: "network" }
+  | { type: "server" };
+
+// Task 1.2 — static error config map
+const ERROR_CONFIG = {
+  "rate-limit": {
+    icon: Clock,
+    message: "Daily AI limit reached.",
+    nudge: "AI unavailable — add steps manually",
+    color: "amber",
+  },
+  "network": {
+    icon: WifiOff,
+    message: "Can't reach the server.",
+    nudge: "AI unavailable — add steps manually",
+    color: "red",
+  },
+  "server": {
+    icon: AlertTriangle,
+    message: "Something went wrong on our end.",
+    nudge: "AI unavailable — add steps manually",
+    color: "red",
+  },
+} as const;
+
+// Task 5 — ErrorBanner inline component
+const ErrorBanner: React.FC<{ error: AiErrorState }> = ({ error }) => {
+  if (error.type === "none") return null;
+  const config = ERROR_CONFIG[error.type];
+  const Icon = config.icon;
+  const isAmber = config.color === "amber";
+  return (
+    <div className={`flex flex-col gap-1 p-3 rounded-xl border ${isAmber ? "bg-amber-50 border-amber-200" : "bg-red-50 border-red-200"} mt-2`}>
+      <div className="flex items-center gap-2">
+        <Icon size={13} className={isAmber ? "text-amber-500" : "text-red-500"} />
+        <span className={`text-[11px] font-bold ${isAmber ? "text-amber-700" : "text-red-700"}`}>{config.message}</span>
+      </div>
+      <span className="text-[10px] text-slate-500 font-medium">{config.nudge}</span>
+    </div>
+  );
+};
 
 interface CreateTaskModalProps {
   onClose: () => void;
@@ -15,7 +61,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
   const [subtaskList, setSubtaskList] = useState<{ title: string; energy?: "low" | "mid" | "high" }[]>([]);
   const [subtaskInput, setSubtaskInput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [aiError, setAiError] = useState("");
+  // Task 1.3 — replace string aiError with AiErrorState
+  const [errorState, setErrorState] = useState<AiErrorState>({ type: "none" });
 
   const addSubtask = () => {
     if (!subtaskInput.trim()) return;
@@ -26,7 +73,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
   const generateSubtasks = async () => {
     if (!newTitle.trim()) return;
     setIsGenerating(true);
-    setAiError("");
+    // Task 2.4 — clear error at start
+    setErrorState({ type: "none" });
 
     try {
       const res = await fetch("/api/chat", {
@@ -35,12 +83,18 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
         body: JSON.stringify({ prompt: newTitle }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        setAiError(data.error || "Something went wrong. Try again!");
+        // Task 2.1 — 429 → rate-limit
+        if (res.status === 429) {
+          setErrorState({ type: "rate-limit" });
+        } else {
+          // Task 2.2 — other errors → server
+          setErrorState({ type: "server" });
+        }
         return;
       }
+
+      const data = await res.json();
 
       if (data.subtasks && Array.isArray(data.subtasks)) {
         setSubtaskList(data.subtasks.map((st: any) => ({ title: st.title, energy: st.energy })));
@@ -57,10 +111,11 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
         
         setNewEnergy(mostCommonEnergy);
       } else {
-        setAiError("Couldn't generate steps. Try again!");
+        setErrorState({ type: "server" });
       }
     } catch {
-      setAiError("Failed to connect. Try again!");
+      // Task 2.3 — fetch exception → network
+      setErrorState({ type: "network" });
     } finally {
       setIsGenerating(false);
     }
@@ -92,6 +147,18 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
     onClose();
   };
 
+  // Task 4 — derive button appearance from errorState
+  const isRateLimit = errorState.type === "rate-limit";
+  const isRetryable = errorState.type === "server" || errorState.type === "network";
+
+  const buttonBg = isRateLimit
+    ? "bg-amber-500"
+    : isRetryable
+    ? "bg-red-500"
+    : "bg-gradient-to-r from-violet-500 to-blue-500";
+
+  const buttonDisabled = isGenerating || !newTitle.trim() || isRateLimit;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="bg-white w-full max-w-lg rounded-[32px] p-6 md:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -108,7 +175,11 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
               autoFocus
               className="w-full bg-slate-50 border text-base text-black/70 placeholder:text-slate-500 border-slate-200 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-black"
               value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
+              onChange={(e) => {
+                setNewTitle(e.target.value);
+                // Task 3.1 — clear non-rate-limit errors on goal edit
+                if (errorState.type !== "rate-limit") setErrorState({ type: "none" });
+              }}
               placeholder="What are we doing today..?"
             />
           </div>
@@ -137,26 +208,29 @@ const CreateTaskModal: FC<CreateTaskModalProps> = ({ onClose, onAdd }) => {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-[10px] font-black uppercase text-black/60 tracking-widest">Breakdown (Optional)</label>
-              {/* MAGIC WAND BUTTON */}
+              {/* Task 4 — AI button with dynamic icon/label/style */}
               <button
                 type="button"
                 onClick={generateSubtasks}
-                disabled={isGenerating || !newTitle.trim()}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-violet-500 to-blue-500 text-white text-[10px] font-black uppercase tracking-wider rounded-full disabled:opacity-40 hover:opacity-90 transition-all active:scale-95"
+                disabled={buttonDisabled}
+                className={`flex items-center gap-1.5 px-3 py-1.5 ${buttonBg} text-white text-[10px] font-black uppercase tracking-wider rounded-full disabled:opacity-40 hover:opacity-90 transition-all active:scale-95`}
               >
-                {isGenerating 
-                  ? <><Loader2 size={11} className="animate-spin" /> Generating...</>
-                  : <><Sparkles size={11} /> AI Generate</>
-                }
+                {isGenerating ? (
+                  <><Loader2 size={11} className="animate-spin" /> Generating...</>
+                ) : isRetryable ? (
+                  <><RotateCcw size={11} /> Retry</>
+                ) : isRateLimit ? (
+                  <><Clock size={11} /> Come back tomorrow</>
+                ) : (
+                  <><Sparkles size={11} /> AI Generate</>
+                )}
               </button>
             </div>
 
-            {/* AI ERROR */}
-            {aiError && (
-              <p className="text-[11px] text-red-500 font-medium mb-2">{aiError}</p>
-            )}
+            {/* Task 5 — ErrorBanner replaces old aiError <p> */}
+            <ErrorBanner error={errorState} />
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-2">
               <input 
                 className="flex-1 bg-slate-50 border border-slate-100 placeholder:text-slate-500 text-black/70 rounded-xl p-3 text-sm outline-none"
                 value={subtaskInput}

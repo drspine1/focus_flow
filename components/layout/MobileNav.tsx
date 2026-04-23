@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, CheckCircle2, Home, LayoutDashboard, Zap, BarChart3, Settings } from "lucide-react";
+import { Menu, X, CheckCircle2, Home, LayoutDashboard, BarChart3 } from "lucide-react";
 import Link from "next/link";
 
 export default function MobileNav() {
@@ -12,9 +12,7 @@ export default function MobileNav() {
   const navItems = [
     { icon: Home, label: "Back Home", href: "/" },
     { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: Zap, label: "Energy Flow", href: "/dashboard/energy" },
     { icon: BarChart3, label: "Analytics", href: "/dashboard/stats" },
-    { icon: Settings, label: "Settings", href: "/dashboard/settings" },
   ];
 
   return (

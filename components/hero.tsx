@@ -61,7 +61,7 @@ export default function HeroSection() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
         >
-          ✦ Day 17: #ENg30DayChallenge ✦
+          ✦ Day 18: #ENg30DayChallenge ✦
         </motion.p>
       </motion.div>
 
@@ -93,11 +93,11 @@ export default function HeroSection() {
           variants={itemVariants}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-        <Link href="/dashboard">  <button className="w-full sm:w-auto bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all active:scale-95 shadow-md">
-            Start Building
+        <Link href="/dashboard" className="w-full sm:w-52"><button className="w-full bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all active:scale-95 shadow-md">
+            Start Your Flow
           </button>
           </Link>
-            <Link href="/learn-more">  <button className="w-full sm:w-auto bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all active:scale-95 shadow-sm">
+            <Link href="/learn-more" className="w-full sm:w-52"><button className="w-full bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-all active:scale-95 shadow-sm">
               Learn More
             </button>
           </Link>

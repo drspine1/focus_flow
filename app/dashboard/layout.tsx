@@ -80,19 +80,19 @@ export default function DashboardLayout({
       onCompleteTask: handleCompleteTask,
       onDeleteTask: handleDeleteTask,
     }}>
-      <div className="flex min-h-screen bg-slate-50">
+      <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900">
         <Sidebar />
         <div className="flex flex-1 flex-col">
-          <header className="h-14 md:h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center px-3 md:px-8 justify-between sticky top-0 z-10">
+          <header className="h-14 md:h-16 border-b border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center px-3 md:px-8 justify-between sticky top-0 z-10">
             <div className="flex items-center gap-2 md:gap-4">
               <MobileNav />
-              <h2 className="font-semibold text-slate-800 text-base md:text-lg hidden sm:block">
+              <h2 className="font-semibold text-slate-800 dark:text-slate-100 text-base md:text-lg hidden sm:block">
                 My Workspace
               </h2>
             </div>
 
             <div className="flex items-center gap-1 md:gap-3">
-              <button onClick={() => setIsArchiveOpen(true)} className="relative p-2 md:p-2.5 bg-slate-50 rounded-xl hover:bg-orange-50 transition-all">
+              <button onClick={() => setIsArchiveOpen(true)} className="relative p-2 md:p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl hover:bg-orange-50 dark:hover:bg-slate-700 transition-all">
                 <Trophy size={20} className="md:w-[22px] md:h-[22px] text-slate-500" />
                 {completedTasks.length > 0 && (
                   <span className="absolute -top-1 -right-1 h-4 w-4 md:h-5 md:w-5 bg-orange-600 text-white text-[8px] md:text-[10px] rounded-full flex items-center justify-center font-black border-2 border-white">
@@ -110,7 +110,7 @@ export default function DashboardLayout({
             </div>
           </header>
 
-          <main className="p-4 md:p-8">
+          <main className="p-4 md:p-8 dark:bg-slate-900">
             {children}
           </main>
 

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { motion, Variants } from "framer-motion"; // Added Variants to the import
 import { Brain, Zap, Target, BarChart3 } from "lucide-react";
+import DarkModeToggle from "@/components/DarkModeToggle";
 export default function HeroSection() {
       const containerVariants: Variants = {
     initial: { opacity: 0 },
@@ -30,7 +31,7 @@ export default function HeroSection() {
     // </div>
 
 
-     <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 bg-slate-100 overflow-x-hidden">
+     <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 bg-slate-100 dark:bg-slate-900 overflow-x-hidden">
       {/* Challenge Badge - Simple Fade In */}
   {/* Challenge Badge - Hanging/Dangling Effect */}
       <motion.div 
@@ -48,7 +49,7 @@ export default function HeroSection() {
             ease: "easeInOut",
           }
         }}
-        className="z-10 max-w-5xl w-full flex justify-center lg:justify-between font-mono text-sm mb-12 lg:mb-0"
+        className="z-10 max-w-5xl w-full flex justify-between items-center font-mono text-sm mb-12 lg:mb-0"
       >
         <motion.p
           animate={{
@@ -59,10 +60,13 @@ export default function HeroSection() {
             ],
           }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-400 pb-6 pt-8 backdrop-blur-2xl lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
+          className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 dark:border-slate-700 bg-gradient-to-b from-zinc-400 dark:from-slate-900 pb-6 pt-8 backdrop-blur-2xl dark:text-slate-100 lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
         >
           ✦ Day 18: #ENg30DayChallenge ✦
         </motion.p>
+        <div className="fixed top-2 right-4 z-50 lg:static lg:z-auto">
+          <DarkModeToggle />
+        </div>
       </motion.div>
 
       {/* Hero Section Container */}
@@ -75,14 +79,14 @@ export default function HeroSection() {
       >
         <motion.h1 
           variants={itemVariants}
-          className="text-4xl md:text-6xl font-bold text-[#000000] mb-6 tracking-tight"
+          className="text-4xl md:text-6xl font-bold text-[#000000] dark:text-slate-100 mb-6 tracking-tight"
         >
           FocusFlow
         </motion.h1>
 
         <motion.p 
           variants={itemVariants}
-          className="text-lg md:text-xl text-slate-900 max-w-2xl mx-auto mb-10 px-4"
+          className="text-lg md:text-xl text-slate-900 dark:text-slate-300 max-w-2xl mx-auto mb-10 px-4"
         >
           AI-powered productivity that respects your bandwidth. 
           Break down tasks and manage your energy, not just your time.
@@ -114,24 +118,24 @@ export default function HeroSection() {
       >
         <motion.div 
           variants={itemVariants}
-          className="p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-default"
+          className="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow cursor-default"
         >
-          <h3 className="font-bold md:text-xl text-lg mb-2 text-[#000000] flex items-center gap-2">
+          <h3 className="font-bold md:text-xl text-lg mb-2 text-[#000000] dark:text-slate-100 flex items-center gap-2">
             AI Task Decomposition
           </h3>
-          <p className="text-slate-900 text-sm md:text-lg leading-relaxed">
+          <p className="text-slate-900 dark:text-slate-300 text-sm md:text-lg leading-relaxed">
             Automatically split big goals into manageable sub-tasks using GPT-4 architecture.
           </p>
         </motion.div>
 
         <motion.div 
           variants={itemVariants}
-          className="p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-default"
+          className="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow cursor-default"
         >
-          <h3 className="font-bold md:text-xl text-lg mb-2 text-[#000000] flex items-center gap-2">
+          <h3 className="font-bold md:text-xl text-lg mb-2 text-[#000000] dark:text-slate-100 flex items-center gap-2">
             Energy Tracking
           </h3>
-          <p className="text-slate-900 text-sm md:text-lg leading-relaxed">
+          <p className="text-slate-900 dark:text-slate-300 text-sm md:text-lg leading-relaxed">
             Tag tasks by mental load and filter your day based on how you feel right now.
           </p>
         </motion.div>
@@ -146,11 +150,11 @@ export default function HeroSection() {
 
 
 {/* Add this below your <HeroSection /> */}
-<section className="py-20 bg-white/20 mt-10">
+<section className="py-20 bg-white/20 dark:bg-slate-800/20 mt-10">
   <div className="max-w-6xl mx-auto px-6">
     <div className="text-center mb-16">
-      <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">Master Your Workflow</h2>
-      <p className="text-black/70 max-w-xl mx-auto">FocusFlow isn't just a to-do list. It's an operating system for your brain.</p>
+      <h2 className="text-3xl md:text-4xl font-bold text-black dark:text-slate-100 mb-4">Master Your Workflow</h2>
+      <p className="text-black/70 dark:text-slate-400 max-w-xl mx-auto">FocusFlow isn't just a to-do list. It's an operating system for your brain.</p>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-10">
@@ -175,8 +179,8 @@ export default function HeroSection() {
           <div className="w-full h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
             <feature.icon className="w-7 h-7" />
           </div>
-          <h3 className="text-xl font-bold text-black mb-3">{feature.title}</h3>
-          <p className="text-black text-lg leading-relaxed">{feature.desc}</p>
+          <h3 className="text-xl font-bold text-black dark:text-slate-100 mb-3">{feature.title}</h3>
+          <p className="text-black dark:text-slate-300 text-lg leading-relaxed">{feature.desc}</p>
         </div>
       ))}
     </div>

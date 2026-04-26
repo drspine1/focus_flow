@@ -57,7 +57,7 @@ export default function HeroSection() {
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           className="fixed left-0 top-0 flex w-full text-[#000000] justify-center border-b border-gray-300 dark:border-slate-700 bg-gradient-to-b from-zinc-400 dark:from-slate-900 pb-6 pt-8 backdrop-blur-2xl dark:text-slate-100 lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-400 lg:p-4 shadow-sm"
         >
-          ✦ Day 20: #ENg30DayChallenge ✦
+          ✦ Day 21: #ENg30DayChallenge ✦
         </motion.p>
         <div className="fixed top-2 right-4 z-50 lg:static lg:z-auto">
           <DarkModeToggle />

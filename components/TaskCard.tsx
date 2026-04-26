@@ -13,9 +13,15 @@ interface TaskCardProps {
 
 export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [completing, setCompleting] = useState(false);
 
-  // Logic to show/hide breakdown
   const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+
+  const handleComplete = () => {
+    if (completing) return;
+    setCompleting(true);
+    onComplete(task.id);
+  };
 
   return (
     <div className="bg-white p-6 rounded-[24px] border border-slate-200/60 shadow-sm hover:border-black/20 transition-all flex flex-col group relative">
@@ -34,7 +40,7 @@ export const TaskCard = ({ task, onComplete, onDelete, onToggleSubtask }: TaskCa
           }`}>
             {task.energy} Power
           </span>
-          <button onClick={() => onComplete(task.id)} className="mr-8 text-blue-600 md:text-slate-300 hover:text-blue-600 transition-all hover:scale-110 active:scale-95">
+          <button onClick={handleComplete} disabled={completing} className="mr-8 text-blue-600 md:text-slate-300 hover:text-blue-600 transition-all hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
             <Circle size={24} />
           </button>
         </div>

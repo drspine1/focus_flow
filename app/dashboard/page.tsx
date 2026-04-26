@@ -37,20 +37,25 @@ export default function Dashboard() {
     });
 
   const handleToggleSubtask = (taskId: string, subtaskId: string) => {
-    setTasks((prevTasks: any[]) =>
-      prevTasks.map((task) => {
-        if (task.id !== taskId) return task;
-        const updatedSubtasks = task.subtasks.map((sub: any) =>
-          sub.id === subtaskId ? { ...sub, isCompleted: !sub.isCompleted } : sub
-        );
-        const allDone = updatedSubtasks.length > 0 && updatedSubtasks.every((s: any) => s.isCompleted);
-        return { 
-          ...task, 
-          subtasks: updatedSubtasks,
-          isCompleted: allDone ? true : task.isCompleted 
-        };
-      })
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const updatedSubtasks = task.subtasks.map((sub: any) =>
+      sub.id === subtaskId ? { ...sub, isCompleted: !sub.isCompleted } : sub
     );
+    const allDone = updatedSubtasks.length > 0 && updatedSubtasks.every((s: any) => s.isCompleted);
+
+    if (allDone) {
+      // Route through onCompleteTask so archive gets updated properly
+      setTasks((prevTasks: any[]) =>
+        prevTasks.map(t => t.id === taskId ? { ...t, subtasks: updatedSubtasks } : t)
+      );
+      onCompleteTask(taskId);
+    } else {
+      setTasks((prevTasks: any[]) =>
+        prevTasks.map(t => t.id === taskId ? { ...t, subtasks: updatedSubtasks } : t)
+      );
+    }
   };
 
   return (

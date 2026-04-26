@@ -6,12 +6,13 @@ import EnergyChart from "@/components/EnergyChart";
 import { useTasks } from "../layout";
 
 export default function AnalyticsPage() {
-  const { tasks } = useTasks();
+  const { tasks, archivedTasks } = useTasks();
   
   const metrics = useMemo(() => {
-    const completed = tasks.filter(t => t.isCompleted);
+    const allTasks = [...tasks, ...archivedTasks];
+    const completed = archivedTasks;
     const completedCount = completed.length;
-    const totalCount = tasks.length;
+    const totalCount = allTasks.length;
     const rate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
     const highEnergyDone = completed.filter(t => t.energy === 'high').length;
@@ -19,21 +20,22 @@ export default function AnalyticsPage() {
 
     // Real-time weekly data: map tasks to days of the week by createdAt
     const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    const today = new Date().getDay(); // 0=Sun, 6=Sat
+    const today = new Date().getDay();
     const weeklyData = dayLabels.map((day, i) => {
-      const dayTasks = tasks.filter(t => {
+      const dayCompleted = archivedTasks.filter(t => {
         if (!(t as any).createdAt) return false;
-        const d = new Date((t as any).createdAt).getDay();
-        return d === i;
-      });
-      const dayCompleted = dayTasks.filter(t => t.isCompleted).length;
-      const dayTotal = dayTasks.length;
+        return new Date((t as any).createdAt).getDay() === i;
+      }).length;
+      const dayTotal = allTasks.filter(t => {
+        if (!(t as any).createdAt) return false;
+        return new Date((t as any).createdAt).getDay() === i;
+      }).length;
       const value = dayTotal > 0 ? Math.round((dayCompleted / dayTotal) * 100) : 0;
       return { day, value, isToday: i === today };
     });
 
     return { completedCount, totalCount, rate, focusScore, weeklyData };
-  }, [tasks]);
+  }, [tasks, archivedTasks]);
 
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 dark:bg-slate-900 dark:text-slate-100">
@@ -95,17 +97,19 @@ export default function AnalyticsPage() {
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-7 gap-1 items-end h-[120px] w-full">
+          <div className="mt-8 grid grid-cols-7 gap-1 items-end w-full">
              {metrics.weeklyData.map((data, i) => (
-               <div key={i} className="flex flex-col items-center gap-2 group/bar w-full">
-                 <div className="opacity-0 group-hover/bar:opacity-100 bg-slate-800 text-white text-[9px] py-1 px-1.5 rounded mb-1 transition-opacity whitespace-nowrap">
-                    {data.value}%
+               <div key={i} className="flex flex-col items-center gap-1 w-full">
+                 <span className={`text-[9px] font-bold ${data.isToday ? 'text-blue-600' : 'text-slate-400 dark:text-slate-500'}`}>
+                   {data.value > 0 ? `${data.value}%` : '—'}
+                 </span>
+                 <div className="w-full flex justify-center h-[80px] items-end">
+                   <div 
+                     style={{ height: `${Math.max(data.value, 4)}%` }} 
+                     className={`w-full max-w-[28px] rounded-t-md transition-all duration-700 ${data.isToday ? 'bg-blue-600 shadow-md shadow-blue-200 dark:shadow-blue-900' : 'bg-slate-200 dark:bg-slate-700'}`} 
+                   />
                  </div>
-                 <div 
-                   style={{ height: `${Math.max(data.value, 4)}%` }} 
-                   className={`w-full max-w-[32px] rounded-t-md transition-all duration-700 ${data.isToday ? 'bg-blue-600 shadow-md shadow-blue-50' : 'bg-slate-100 dark:bg-slate-700'}`} 
-                 />
-                 <span className={`text-[10px] font-bold mt-1 ${data.isToday ? 'text-blue-600' : 'text-slate-400'}`}>
+                 <span className={`text-[10px] font-bold ${data.isToday ? 'text-blue-600' : 'text-slate-400'}`}>
                     {data.day}
                  </span>
                </div>
